@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("LOGIN");
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         final TextInputLayout id_Layout = findViewById(R.id.TextInput_ID);
         final TextInputLayout pw_Layout = findViewById(R.id.TextInput_PW);
@@ -44,8 +46,11 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     id_Layout.setErrorEnabled(false);
                     if (pw.equals(input_pw)) {  // 두 String 비교
-                        pw_Layout.setErrorEnabled(false);
+                        pw_Layout.setErrorEnabled(false);   /***** 로그인 완료 *****/
                         Toast.makeText(MainActivity.this, input_id + "님, 환영합니다! (" + pw + ")", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
+                        setResult(200, intent.putExtra("id", input_id));
+                        finish();
                     }
                     else{
                         pw_Layout.setError("PW is wrong");
@@ -65,5 +70,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, SignUpActivity.class));
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:{ //toolbar의 back키 눌렀을 때 동작
+                finish();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
